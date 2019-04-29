@@ -4,7 +4,9 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h1>List of Products </h1>
+            <h1>List of Products 
+            <small><a href="{{ route('products.create') }}" class="btn btn-info">New Product</a></small>
+            </h1>
         </div>
     </div>
     <div class="row">

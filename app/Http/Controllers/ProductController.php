@@ -14,6 +14,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        // Search input
         $q = $request->input('q');
         if ($q !== null){
             $products = Product::where('name', 'like', "%$q%")->orWhere("type", 'like', "%$q%")->paginate(5);
@@ -52,17 +53,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -70,7 +60,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         return view('products.edit', compact('product'));
     }
 
@@ -89,9 +79,9 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'barcode' => 'required|alpha_num',
         ]);
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $product->update($validatedData);
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product updated !');
     }
 
     /**
@@ -102,8 +92,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('message', ["type" => "danger", "msg" => 'Product deleted !']);
     }
 }
